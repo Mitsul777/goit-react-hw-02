@@ -10,11 +10,17 @@ const App = () => {
         neutral: 0,
         bad: 0
     });
+    const updateFeedback = feedbackType => {
+        setClicks(prevState => ({
+            ...prevState,
+            [feedbackType]: prevState[feedbackType] + 1
+        }));
+    }
 
     return (
         <>
             <Description />
-            <Options clicks={clicks} setClicks={setClicks}  />
+            <Options updateFeedback={updateFeedback} />
             <Feedback clicks={clicks} />
         </>
     );

@@ -1,18 +1,10 @@
-import {useState} from "react";
-const Options = ({ clicks, setClicks }) => {
-    const handleClick = (key) => {
-        setClicks({
-            ...clicks,
-            [key]: clicks[key] + 1,
-        });
-    };
-
+const Options = ({updateFeedback }) => {
     return (
 
         <div>
-            <button onClick={() => handleClick("good")}>Good</button>
-            <button onClick={() => handleClick("neutral")}>Neutral</button>
-            <button onClick={() => handleClick("bad")}>Bad</button>
+            <button onClick={() => updateFeedback("good")}>Good</button>
+            <button onClick={() => updateFeedback("neutral")}>Neutral</button>
+            <button onClick={() => updateFeedback("bad")}>Bad</button>
         </div>
     )
 }
