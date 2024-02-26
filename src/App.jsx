@@ -50,8 +50,9 @@ const App = () => {
         <>
             <Description />
             <Options updateFeedback={updateFeedback} resetFeedback={resetFeedback} showReset={showReset} />
-            {totalClicks > 0 ? <Feedback clicks={clicks} totalClicks={totalClicks} positivePercentage={positivePercentage} /> : <Notification />}
-        </>
+            {savedClicks ? (<Feedback clicks={clicks} totalClicks={totalClicks} positivePercentage={positivePercentage} />) : (
+                <Notification />
+            )}        </>
     );
 };
 export default App
