@@ -1,58 +1,44 @@
-import {useEffect, useState} from "react";
-import Description from "./components/description/Description.jsx";
-import Feedback from "./components/feedback/Feedback.jsx";
-import Options from "./components/options/Options.jsx";
-import Notification from "./components/Notification/Notification.jsx";
-
-
-const App = () => {
-    const savedClicks = JSON.parse(window.localStorage.getItem("saved-clicks"));
-    const [clicks, setClicks] = useState(savedClicks || {
+import { useState } from 'react'
+import './App.css'
+import Feedback from "./Feedback/Feedback.jsx";
+import Options from "./Options/Options.jsx";
+import Description from "./Description/Description.jsx";
+import Notification from "./Notification/Notification.jsx";
+function App() {
+    const [feedback, setFeedback] = useState({
         good: 0,
         neutral: 0,
         bad: 0
     });
-    const [totalClicks, setTotalClicks] = useState(0);
-    const [showReset, setShowReset] = useState(false);
-    const [positivePercentage, setPositivePercentage] = useState(0);
-    const updateFeedback = feedbackType => {
-        setClicks(prevClicks => ({
-            ...prevClicks,
-            [feedbackType]: prevClicks[feedbackType] + 1
+
+    const [totalFeedback, setTotalFeedback ] = useState({
+        total : 0
+    });
+
+    const [feedbackGiven, setFeedbackGiven] = useState(false); // Додайте стан для відстеження надання зворотного зв'язку
+
+    const updateFeedback = (feedbackType) => {
+        setFeedback(prevFeedback => ({
+            ...prevFeedback,
+            [feedbackType]: prevFeedback[feedbackType] + 1,
         }));
-        setTotalClicks(prevTotalClicks => prevTotalClicks + 1);
-        setShowReset(true);
-    }
 
-    const resetFeedback = () => {
-        setClicks({
-            good: 0,
-            neutral: 0,
-            bad: 0
-        });
-        setTotalClicks(0);
-        setShowReset(false);
-        setPositivePercentage(0);
+        setTotalFeedback(prevTotalFeedback => ({
+            total: prevTotalFeedback.total + 1
+        }));
+
+        setFeedbackGiven(true);
     };
-
-    useEffect(() => {
-        if (totalClicks > 0) {
-            const positiveCount = clicks.good + clicks.neutral;
-            const percentage = Math.round((positiveCount / totalClicks) * 100);
-            setPositivePercentage(percentage);
-        }
-    }, [clicks, totalClicks]);
-    useEffect(() => {
-        window.localStorage.setItem("saved-clicks", JSON.stringify(clicks));
-    }, [clicks]);
 
     return (
         <>
             <Description />
-            <Options updateFeedback={updateFeedback} resetFeedback={resetFeedback} showReset={showReset} />
-            {savedClicks ? (<Feedback clicks={clicks} totalClicks={totalClicks} positivePercentage={positivePercentage} />) : (
-                <Notification />
-            )}        </>
+            <Options updateFeedback={updateFeedback} />
+            <Notification/>
+            {feedbackGiven && <Feedback feedback={feedback} totalFeedback={totalFeedback} />}
+        </>
     );
-};
-export default App
+}
+
+export default App;
+
