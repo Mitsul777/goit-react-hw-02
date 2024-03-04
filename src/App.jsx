@@ -44,6 +44,14 @@ function App() {
         };
     const hasFeedback = totalFeedback.total > 0;
 
+    useEffect(() => {
+        localStorage.setItem('totalFeedback', JSON.stringify(totalFeedback))
+    }, [totalFeedback]);
+
+    useEffect(() => {
+        localStorage.setItem('feedback', JSON.stringify(feedback))
+    }, [feedback]);
+
 
 
     return (
