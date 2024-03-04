@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Feedback from "./Feedback/Feedback.jsx";
 import Options from "./Options/Options.jsx";
@@ -15,7 +15,9 @@ function App() {
         total : 0
     });
 
-    const [feedbackGiven, setFeedbackGiven] = useState(false); // Додайте стан для відстеження надання зворотного зв'язку
+    const positiveFeedback = Math.round(((feedback.good + feedback.neutral) / totalFeedback.total) * 100)
+
+    const [feedbackGiven, setFeedbackGiven] = useState(false);
 
     const updateFeedback = (feedbackType) => {
         setFeedback(prevFeedback => ({
@@ -29,13 +31,26 @@ function App() {
 
         setFeedbackGiven(true);
     };
+    const resetFeedback = () => {
+        setFeedback({
+            good: 0,
+            neutral: 0,
+            bad: 0
+        });
+        setTotalFeedback({
+            total: 0
+        });
+        setFeedbackGiven(false);
+        };
+    const hasFeedback = totalFeedback.total > 0;
+
+
 
     return (
         <>
             <Description />
-            <Options updateFeedback={updateFeedback} />
-            <Notification/>
-            {feedbackGiven && <Feedback feedback={feedback} totalFeedback={totalFeedback} />}
+            <Options updateFeedback={updateFeedback} resetFeedback={resetFeedback} hasFeedback={hasFeedback} positiveFeedback={positiveFeedback} />
+            {feedbackGiven ? <Feedback feedback={feedback} totalFeedback={totalFeedback} positiveFeedback={positiveFeedback} /> : <Notification />}
         </>
     );
 }
