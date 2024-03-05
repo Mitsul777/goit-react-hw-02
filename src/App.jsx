@@ -6,7 +6,7 @@ import Description from "./Description/Description.jsx";
 import Notification from "./Notification/Notification.jsx";
 
 function App() {
-    const [feedback, setFeedback] = useState(() =>{
+    const [feedback, setFeedback] = useState(() => {
         const savedFeedback = window.localStorage.getItem('saved-feedback');
         if (savedFeedback !== null) {
             return JSON.parse(savedFeedback);
@@ -45,7 +45,7 @@ function App() {
         });
         setFeedbackGiven(false);
     };
-    const hasFeedback = feedback.total > 0;
+    const hasFeedback = totalFeedback > 0; // Исправлено здесь
 
     return (
         <>
