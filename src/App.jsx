@@ -25,16 +25,14 @@ function App() {
 
     const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
 
-    const positiveFeedback = Math.round(((feedback.good + feedback.neutral) / totalFeedback) * 100)
+    const positiveFeedback = Math.round(((feedback.good + feedback.neutral) / totalFeedback) * 100);
 
-    const [feedbackGiven, setFeedbackGiven] = useState(false);
 
     const updateFeedback = (feedbackType) => {
         setFeedback(prevFeedback => ({
             ...prevFeedback,
             [feedbackType]: prevFeedback[feedbackType] + 1
         }));
-        setFeedbackGiven(true);
     };
 
     const resetFeedback = () => {
@@ -43,15 +41,15 @@ function App() {
             neutral: 0,
             bad: 0
         });
-        setFeedbackGiven(false);
     };
+
     const hasFeedback = totalFeedback > 0; // Исправлено здесь
 
     return (
         <>
             <Description />
             <Options updateFeedback={updateFeedback} resetFeedback={resetFeedback} hasFeedback={hasFeedback} positiveFeedback={positiveFeedback} />
-            {feedbackGiven ? <Feedback feedback={feedback} positiveFeedback={positiveFeedback} /> : <Notification />}
+            {hasFeedback ? <Feedback feedback={feedback} positiveFeedback={positiveFeedback} /> : <Notification />}
         </>
     );
 }
