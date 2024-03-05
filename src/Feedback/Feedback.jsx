@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Feedback = ({ feedback, positiveFeedback }) => {
     return (
         <div>
@@ -9,4 +11,5 @@ const Feedback = ({ feedback, positiveFeedback }) => {
         </div>
     )
 }
-export default Feedback
+
+export default Feedback;

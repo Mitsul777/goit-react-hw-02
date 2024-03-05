@@ -1,3 +1,5 @@
+import React from 'react';
+
 const Options = ({updateFeedback, resetFeedback, hasFeedback}) => {
     return (
         <div>
@@ -8,4 +10,5 @@ const Options = ({updateFeedback, resetFeedback, hasFeedback}) => {
         </div>
     )
 }
-export default Options
+
+export default Options;
