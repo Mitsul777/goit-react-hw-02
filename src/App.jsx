@@ -5,17 +5,25 @@ import Options from "./Options/Options.jsx";
 import Description from "./Description/Description.jsx";
 import Notification from "./Notification/Notification.jsx";
 function App() {
-    const [feedback, setFeedback] = useState({
-        good: 0,
-        neutral: 0,
-        bad: 0
-    });
+    const [feedback, setFeedback] = useState(() =>{
+        const savedFeedback = window.localStorage.getItem('saved-feedback');
+        if (savedFeedback !== null) {
+            return savedFeedback;
+        }
+        return {
+            good: 0,
+            neutral: 0,
+            bad: 0,
+            total : 0
+        }
+    })
+    useEffect(() => {
+        window.localStorage.setItem('saved-feedback', feedback);
+    }, [feedback]);
 
-    const [totalFeedback, setTotalFeedback ] = useState({
-        total : 0
-    });
 
-    const positiveFeedback = Math.round(((feedback.good + feedback.neutral) / totalFeedback.total) * 100)
+
+    const positiveFeedback = Math.round(((feedback.good + feedback.neutral) / feedback.total) * 100)
 
     const [feedbackGiven, setFeedbackGiven] = useState(false);
 
@@ -23,42 +31,28 @@ function App() {
         setFeedback(prevFeedback => ({
             ...prevFeedback,
             [feedbackType]: prevFeedback[feedbackType] + 1,
-        }));
-
-        setTotalFeedback(prevTotalFeedback => ({
-            total: prevTotalFeedback.total + 1
+            total: prevFeedback.total + 1 // Use prevFeedback to update total
         }));
 
         setFeedbackGiven(true);
     };
+
     const resetFeedback = () => {
         setFeedback({
             good: 0,
             neutral: 0,
-            bad: 0
-        });
-        setTotalFeedback({
+            bad: 0,
             total: 0
         });
         setFeedbackGiven(false);
-        };
-    const hasFeedback = totalFeedback.total > 0;
-
-    useEffect(() => {
-        localStorage.setItem('totalFeedback', JSON.stringify(totalFeedback))
-    }, [totalFeedback]);
-
-    useEffect(() => {
-        localStorage.setItem('feedback', JSON.stringify(feedback))
-    }, [feedback]);
-
-
+    };
+    const hasFeedback = feedback.total > 0;
 
     return (
         <>
             <Description />
             <Options updateFeedback={updateFeedback} resetFeedback={resetFeedback} hasFeedback={hasFeedback} positiveFeedback={positiveFeedback} />
-            {feedbackGiven ? <Feedback feedback={feedback} totalFeedback={totalFeedback} positiveFeedback={positiveFeedback} /> : <Notification />}
+            {feedbackGiven ? <Feedback feedback={feedback} positiveFeedback={positiveFeedback} /> : <Notification />}
         </>
     );
 }
